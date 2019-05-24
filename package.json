@@ -1,0 +1,32 @@
+{
+  "name": "embark-react2",
+  "version": "0.0.1",
+  "dependencies": {
+    "@babel/runtime-corejs2": "^7.3.1",
+    "babel-loader": "^8.0.5",
+    "bootstrap": "^4.3.1",
+    "embarkjs-connector-web3": "^4.0.0",
+    "openzeppelin-solidity": "^2.2.0",
+    "react": "^16.8.2",
+    "react-bootstrap": "^1.0.0-beta.8",
+    "react-dom": "^16.8.2",
+    "react-scripts": "2.1.5",
+    "solc": "^0.5.8"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "embark test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "description": ""
+}
