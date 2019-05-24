@@ -6,13 +6,13 @@ import Table from 'react-bootstrap/Table';
 
 class FundingStatus extends React.Component {
     render(){
-        let percTimeToStart = this.props.state.timeToStart/this.props.state.contractPeriod;
-        let percTimeToClose = this.props.state.timeToClose/this.props.state.contractPeriod;
+        let percGoalReached = this.props.state.contractBalance/this.props.state.cap;
+        //let percAboveGoal = this.props.state.timeToClose/this.props.state.contractPeriod;  // <ProgressBar striped now={percAboveGoal} variant="info" key={2}/>
         
         const progressInstance = (
           <ProgressBar>
-            <ProgressBar striped now={percTimeToStart} variant="success" key={1}/>
-            <ProgressBar striped now={percTimeToClose} variant="warning" key={2}/>
+            <ProgressBar striped now={percGoalReached} key={1}/>
+
           </ProgressBar>
         );
 
@@ -24,11 +24,13 @@ class FundingStatus extends React.Component {
                         <Table bordered responsive >
                             <tbody>
                                 <tr>
-                                    <td colSpan="2">{progressInstance}</td>
+                                    <td colSpan="4">{progressInstance}</td>
                                 </tr>
                                 <tr>
                                     <td>Contract balance: {this.props.state.contractBalance}</td>
-                                    <td>Goal: {}</td>
+                                    <td>Goal: {this.props.state.goal}</td>
+                                    <td>Goal reached: {(this.props.state.goalReached).toString()}</td>
+                                    <td>Hard Cap: {this.props.state.cap}</td>
                                 </tr>
                             </tbody>
                         </Table>
