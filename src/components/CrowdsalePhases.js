@@ -7,10 +7,21 @@ import Pagination from 'react-bootstrap/Pagination';
 class CrowdsalePhases extends React.Component {
     render(){
 
-        let currentState = this.props.state.currentState;
-        let states = ['Not Started','Started','Closed','Finalized','Refunding','Fund Withdrawn'];
+        let currentState;
+        let states = ['Not Started','Started','Closed','Refunding','Beneficiary withdraw'];
         let paginationItems = [];
     
+        if(this.props.state.timeToOpen > 0) {
+            currentState = 0;
+        } else if(this.props.state.isOpen) {
+            currentState = 1;
+        } else if (!this.props.state.finalized) {
+            currentState = 2;
+        } else if (!this.props.state.goalReached) {
+            currentState = 3;
+        } else {
+            currentState = 4;
+        }
         for (let n = 0; n <= states.length-1; n++) {
         paginationItems.push(
             <Pagination.Item key={n} active={n === currentState}>

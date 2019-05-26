@@ -6,13 +6,14 @@ import Table from 'react-bootstrap/Table';
 
 class Timelines extends React.Component {
     render(){
-        let percTimeToOpen = this.props.state.timeToOpen/this.props.state.contractPeriod;
-        let percTimeToClose = this.props.state.timeToClose/this.props.state.contractPeriod;
+
+        let percTimeToOpen = (this.props.state.timeToOpen/this.props.state.contractPeriod)*100;
+        let percTimeToClose = (this.props.state.timeToClose/this.props.state.contractPeriod)*100;
         
         const progressInstance = (
           <ProgressBar>
-            <ProgressBar striped now={percTimeToOpen} variant="success" key={1}/>
-            <ProgressBar striped now={percTimeToClose} variant="warning" key={2}/>
+            <ProgressBar striped now={percTimeToClose} variant="success" key={1}/>
+            <ProgressBar striped now={percTimeToOpen} variant="warning" key={2}/>
           </ProgressBar>
         );
 

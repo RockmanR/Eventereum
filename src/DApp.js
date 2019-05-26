@@ -29,8 +29,7 @@ class App extends React.Component {
       CrowdsaleAddr: '',
       isMinter: false,
       isDepositer: false,
-      isOpen: false,
-      currentState: 0,
+      isOpen: false, 
       openingTime: '',
       timeToOpen: 0,
       timeToClose: '',
@@ -40,11 +39,15 @@ class App extends React.Component {
       goal: '',
       goalReached: '',
       finalized: '',
-      contractBalance: ''
+      weiRaised: ''
     };
   }
 
   componentDidMount() {
+    this.getContractData();
+  }
+
+  getContractData(){
     EmbarkJS.onReady((err) => {
       if (err) {
         this.setState({
@@ -98,8 +101,8 @@ class App extends React.Component {
       Crowdsale.methods.finalized().call().then((result) => {
         this.setState({finalized : result});
       });
-      web3.eth.getBalance(Crowdsale.address).then((result) => {
-        this.setState({contractBalance : result});
+      Crowdsale.methods.weiRaised().call().then((result) => {
+        this.setState({weiRaised : result});
       });
       this.setState({
           TokenAddr: Token.address,

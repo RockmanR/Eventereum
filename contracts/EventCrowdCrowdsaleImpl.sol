@@ -4,11 +4,11 @@ import "./EventCrowdCrowdsale.sol";
 
 contract EventCrowdCrowdsaleImpl is EventCrowdCrowdsale  {
 
-    uint256 private _openingTime = now+2;
-    uint256 private _closingTime = now+4;
+    uint256 private _openingTime = now+120;
+    uint256 private _closingTime = now+1240;
     uint256 private _rate = 1;
-    uint256 private _goal = 100;
-    uint256 private _cap = 100 ether;
+    uint256 private _goal = 0.5 ether;
+    uint256 private _cap = 1 ether;
 
     constructor (IERC20 token, address payable projectEscrow)
         public
