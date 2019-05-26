@@ -23,7 +23,10 @@ class AddressDashboard extends React.Component {
         if(this.props.state.isOpen){
             statusCrowdsale = <a>Ready 👍</a>;
         } else {
-            statusCrowdsale = <font color="red">Crowdsale contract is closed</font>
+            if(this.props.state.timeToOpen > 0){
+                statusCrowdsale = <a>Crowdsale contract is not opened yet</a>;
+            }
+            statusCrowdsale = <a>Crowdsale contract is closed</a>
         }
 
         return(

@@ -29,18 +29,25 @@ class App extends React.Component {
       CrowdsaleAddr: '',
       isMinter: false,
       isDepositer: false,
-      isOpen: false,
-      currentState: 0,
-      timeToStart: 0,
+      isOpen: false, 
+      openingTime: '',
+      timeToOpen: 0,
       timeToClose: '',
+      closingTime: '',
       contractPeriod: '',
       cap: '',
       goal: '',
-      contractBalance: ''
+      goalReached: '',
+      finalized: '',
+      weiRaised: ''
     };
   }
 
   componentDidMount() {
+    this.getContractData();
+  }
+
+  getContractData(){
     EmbarkJS.onReady((err) => {
       if (err) {
         this.setState({
@@ -67,8 +74,14 @@ class App extends React.Component {
           this.setState({isOpen : true});
         }
       });
-      Crowdsale.methods.timeToStart().call().then((result) => {
-          this.setState({timeToStart : result});
+      Crowdsale.methods.openingTime().call().then((result) => {
+        this.setState({openingTime : result});
+      });
+      Crowdsale.methods.timeToOpen().call().then((result) => {
+          this.setState({timeToOpen : result});
+      });
+      Crowdsale.methods.closingTime().call().then((result) => {
+        this.setState({closingTime : result});
       });
       Crowdsale.methods.timeToClose().call().then((result) => {
         this.setState({timeToClose : result});
@@ -76,11 +89,20 @@ class App extends React.Component {
       Crowdsale.methods.contractPeriod().call().then((result) => {
         this.setState({contractPeriod : result});
       });
-      Crowdsale.methods.contractPeriod().call().then((result) => {
-        this.setState({contractPeriod : result});
+      Crowdsale.methods.goal().call().then((result) => {
+        this.setState({goal : result});
       });
-      web3.eth.getBalance(Crowdsale.address).then((result) => {
-        this.setState({contractBalance : result});
+      Crowdsale.methods.cap().call().then((result) => {
+        this.setState({cap : result});
+      });
+      Crowdsale.methods.goalReached().call().then((result) => {
+        this.setState({goalReached : result});
+      });
+      Crowdsale.methods.finalized().call().then((result) => {
+        this.setState({finalized : result});
+      });
+      Crowdsale.methods.weiRaised().call().then((result) => {
+        this.setState({weiRaised : result});
       });
       this.setState({
           TokenAddr: Token.address,

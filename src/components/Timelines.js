@@ -6,13 +6,14 @@ import Table from 'react-bootstrap/Table';
 
 class Timelines extends React.Component {
     render(){
-        let percTimeToStart = this.props.state.timeToStart/this.props.state.contractPeriod;
-        let percTimeToClose = this.props.state.timeToClose/this.props.state.contractPeriod;
+
+        let percTimeToOpen = (this.props.state.timeToOpen/this.props.state.contractPeriod)*100;
+        let percTimeToClose = (this.props.state.timeToClose/this.props.state.contractPeriod)*100;
         
         const progressInstance = (
           <ProgressBar>
-            <ProgressBar striped now={percTimeToStart} variant="success" key={1}/>
-            <ProgressBar striped now={percTimeToClose} variant="warning" key={2}/>
+            <ProgressBar striped now={percTimeToClose} variant="success" key={1}/>
+            <ProgressBar striped now={percTimeToOpen} variant="warning" key={2}/>
           </ProgressBar>
         );
 
@@ -24,11 +25,13 @@ class Timelines extends React.Component {
                         <Table bordered responsive >
                             <tbody>
                                 <tr>
-                                    <td colSpan="2">{progressInstance}</td>
+                                    <td colSpan="4">{progressInstance}</td>
                                 </tr>
                                 <tr>
+                                    <td>Date/Time to close: {this.props.state.closingTime}</td>
                                     <td>Time left to close: {this.props.state.timeToClose}</td>
-                                    <td>Time left to start: {this.props.state.timeToStart}</td>
+                                    <td>Date/Time to open: {this.props.state.openingTime}</td>
+                                    <td>Time left to open: {this.props.state.timeToOpen}</td>
                                 </tr>
                             </tbody>
                         </Table>

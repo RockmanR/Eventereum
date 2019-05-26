@@ -41,7 +41,7 @@ contract EventCrowdCrowdsale is RefundablePostDeliveryCrowdsale, MintedCrowdsale
     /**
      * @return The number of seconds left to start the crowdsale.
      */
-    function timeToStart() public view returns (uint256) {
+    function timeToOpen() public view returns (uint256) {
         if(block.timestamp <= openingTime()){
             uint256 time = openingTime();
             return time.sub(block.timestamp);
