@@ -6,6 +6,9 @@ import React from 'react';
 //importing web3 API
 import EmbarkJS from './embarkArtifacts/embarkjs';
 
+//importing other nesesities
+import BigNumber from 'bignumber.js';
+
 //importing contracts
 import Token from './embarkArtifacts/contracts/EventCrowdTokenImpl';
 import InsPlan from './embarkArtifacts/contracts/InstalmentPlanImpl';
@@ -16,6 +19,7 @@ import AddressDashboard from './components/AddressDashboard';
 import CrowdsalePhases from './components/CrowdsalePhases';
 import Timelines from './components/Timelines';
 import FundingStatus from './components/FundingStatus';
+import UserPanel from './components/userPanel';
 
 
 class App extends React.Component {
@@ -39,12 +43,16 @@ class App extends React.Component {
       goal: '',
       goalReached: '',
       finalized: '',
-      weiRaised: ''
+      weiRaised: '',
+      web3Account0: '',
+      web3Account0_bal: '',
+      tokenBalance: ''
     };
   }
 
   componentDidMount() {
     this.getContractData();
+    this.getAccountData();
   }
 
   getContractData(){
@@ -112,6 +120,26 @@ class App extends React.Component {
     });
   }
 
+  getAccountData() {
+    web3.eth.getAccounts( (error, accounts) => {
+      if(error) {
+        console.log('Can not connect to web3 accounts..',error);
+      } else {
+        web3.eth.getBalance(accounts[0]).then( balance => {
+          this.setState({
+            web3Account0 : accounts[0],
+            web3Account0_bal: balance
+          });
+        })
+        InsPlan.methods.depositsOf(accounts[0]).call().then(deposit => {
+          let tokenPrice = new BigNumber(1000000000000000);
+          let deposit_BIG = new BigNumber(deposit);
+          let tokenBalance_BIG = deposit_BIG.div(tokenPrice);
+          this.setState({tokenBalance: tokenBalance_BIG.toNumber()});
+        });
+      }
+    });
+  }
 
   render() {
     if (this.state.error) {
@@ -131,6 +159,7 @@ class App extends React.Component {
         <Timelines state={this.state}/>
         <FundingStatus state={this.state}/>
         <AddressDashboard state={this.state}/>
+        <UserPanel state={this.state}/>
       </div>
     );
   }
