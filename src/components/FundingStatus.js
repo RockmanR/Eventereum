@@ -32,7 +32,8 @@ class FundingStatus extends React.Component {
                 </ProgressBar>
             );
         }
-        //let tokenBought = weiRaised_BIG.div(1000000000000000);
+        let tokenPrice = new BigNumber(1000000000000000);
+        let tokenBought = weiRaised_BIG.div(tokenPrice);
         //console.log(percGoalRached);
 
         return(
@@ -43,10 +44,10 @@ class FundingStatus extends React.Component {
                         <Table bordered responsive >
                             <tbody>
                                 <tr>
-                                    <td colSpan="4">{progressBar}</td>
+                                    <td colSpan="5">{progressBar}</td>
                                 </tr>
                                 <tr>
-                                    <td>Token bought: {}</td>
+                                    <td>Token bought: {tokenBought.toNumber()}</td> 
                                     <td>Wei Raised: {this.props.state.weiRaised}</td>
                                     <td>Goal: {this.props.state.goal}</td>
                                     <td>Hard Cap: {this.props.state.cap}</td> 

@@ -31,9 +31,9 @@ class AddressDashboard extends React.Component {
 
         return(
             <div>
-                <h3>
+                <h5>
                 Relevent Addresses
-                </h3>
+                </h5>
                 These are the addresses of all deployed contracts and the beneficiary, for transpaerncy and integrity. 
                 <br/>
                 <br/>
