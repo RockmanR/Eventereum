@@ -19,7 +19,8 @@ import AddressDashboard from './components/AddressDashboard';
 import CrowdsalePhases from './components/CrowdsalePhases';
 import Timelines from './components/Timelines';
 import FundingStatus from './components/FundingStatus';
-import UserPanel from './components/userPanel';
+import UserPanel from './components/UserPanel';
+import ConfigButton from './components/ConfigButton';
 
 
 class App extends React.Component {
@@ -141,6 +142,21 @@ class App extends React.Component {
     });
   }
 
+  //to be accessed from UserPanel.js
+  buyTokens() {
+    console.log("helloo")
+    //let address = this.props.state.web3Account0;
+    //let amount = 10000000000;
+    //Crowdsale.methods.buyTokens(address).send({from: address, value: amount}).then( response => {
+    //    console.log('buyToken respons: ',response);
+    //})
+  }
+
+  //to be accessed from ConfigButton.js
+  contractConfig() {
+    console.log("congract config")
+  }
+
   render() {
     if (this.state.error) {
       return <p>{this.state.error}</p>;
@@ -159,7 +175,8 @@ class App extends React.Component {
         <Timelines state={this.state}/>
         <FundingStatus state={this.state}/>
         <AddressDashboard state={this.state}/>
-        <UserPanel state={this.state}/>
+        <UserPanel state={this.state} buyTokens={this.buyTokens}/>
+        <ConfigButton contractConfig={this.contractConfig}/>
       </div>
     );
   }

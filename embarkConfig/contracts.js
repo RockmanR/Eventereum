@@ -80,10 +80,6 @@ module.exports = {
         deploy: false,
         track: false
       },
-      //Crowdsale: {
-      //  deploy: false,
-      //  track: false
-      //},
       IProjectEscrow: {
         deploy: false,
         track: false
@@ -163,11 +159,11 @@ module.exports = {
   // default environment, merges with the settings in default
   // assumed to be the intended environment by `embark run`
   development: {
-    dappConnection: [
-      "ws://localhost:8546",
-      "http://localhost:8545",
-      "$WEB3"  // uses pre existing web3 object if available (e.g in Mist)
-    ]
+    //dappConnection: [                 ////////// what is the rational for keeping web3 at the end here?
+    //  "ws://localhost:8546",
+    //  "http://localhost:8545",
+    //  "$WEB3"  // uses pre existing web3 object if available (e.g in Mist)
+    //]
   },
 
   // merges with the settings in default
