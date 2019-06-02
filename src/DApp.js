@@ -155,10 +155,19 @@ class App extends React.Component {
     })
   }
 
-  //to be accessed from AdminPanel.js
-  finalize() {
-    Crowdsale.methods.finalize().send().then( response => {
-      console.log('finalize respons: ', response);
+  //to be accessed from UserPanel.js
+  withdrawTokens() {
+    let address = this.state.web3Account0;
+    Crowdsale.methods.withdrawTokens(address).send().then( response => {
+      console.log('withdrawTokens respons: ',response);
+    })
+  }
+
+  //to be accessed from UserPanel.js
+  claimRefund() {
+    let address = this.state.web3Account0;
+    Crowdsale.methods.claimRefund(address).send().then( response => {
+      console.log('claimRefund respons: ',response);
     })
   }
 
@@ -176,6 +185,12 @@ class App extends React.Component {
     })
   }
 
+  //to be accessed from AdminPanel.js
+  finalize() {
+    Crowdsale.methods.finalize().send().then( response => {
+      console.log('finalize respons: ', response);
+    })
+  }
 
   //to be accessed from ConfigButton.js
   contractConfig() {
@@ -201,7 +216,7 @@ class App extends React.Component {
         <Timelines state={this.state}/>
         <FundingStatus state={this.state}/>
         <AddressDashboard state={this.state}/>
-        <UserPanel state={this.state} buyTokens={this.buyTokens} voteToReject={this.voteToReject} undoVoteToReject={this.undoVoteToReject}/> 
+        <UserPanel state={this.state} buyTokens={this.buyTokens} withdrawTokens={this.withdrawTokens} claimRefund={this.claimRefund} voteToReject={this.voteToReject} undoVoteToReject={this.undoVoteToReject}/> 
         <AdminPanel finalize={this.finalize} />
         <ConfigButton contractConfig={this.contractConfig}/>
 

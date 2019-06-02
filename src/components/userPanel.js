@@ -36,6 +36,16 @@ class UserPanel extends React.Component {
         })
     }
 
+    onWithdrawTokens(e) {
+        e.preventDefault();
+        this.props.withdrawTokens();
+    }
+
+    onClaimRefund(e) {
+        e.preventDefault();
+        this.props.claimRefund();
+    }
+
     render(){
 
         return(
@@ -68,7 +78,6 @@ class UserPanel extends React.Component {
                 <br/>
                 <br/>
                 <h5>Would you like to buy Tokens?</h5>
-
                 <Container>
                     <Row className="justify-content-sm-center bordered">
                         <Form>
@@ -92,13 +101,20 @@ class UserPanel extends React.Component {
                     <Row className="justify-content-sm-center bordered">
                         <Table bordered responsive >
                             <tbody>
-                            <tr>
-                                    <td>Instalment plan</td>
-                                    <td><Button variant="outline-danger" type="submit">voteToReject</Button> <Button variant="outline-primary" type="submit">undoVoteToReject</Button></td>
+                                <tr>
+                                    <td>Withdraw tokens: </td>
+                                    <td><Button variant="outline-primary" type="submit" onClick={e => this.onWithdrawTokens(e)}>Withdraw Tokens</Button></td>
                                 </tr>
                                 <tr>
                                     <td>Get refund: </td>
-                                    <td><Button variant="outline-primary" type="submit">Refund</Button></td>
+                                    <td><Button variant="outline-primary" type="submit" onClick={e => this.onClaimRefund(e)}>Claim refund</Button></td>
+                                </tr>
+                                <tr>
+                                    <td>Instalment plan</td>
+                                    <td>
+                                        <Button variant="outline-danger" type="submit">voteToReject</Button>
+                                        <Button variant="outline-primary" type="submit">undoVoteToReject</Button>
+                                    </td>
                                 </tr>
                             </tbody>
                         </Table>                    
