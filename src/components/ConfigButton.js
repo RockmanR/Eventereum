@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 
 class ConfigButton extends React.Component {
 
-    onClick(e){
+    onContractConfig(e){
         e.preventDefault();
         this.props.contractConfig();
     }
@@ -19,7 +19,7 @@ class ConfigButton extends React.Component {
                 <h5>config button</h5>
                 <Container>
                     <Row className="justify-content-sm-center bordered">
-                        <Button variant="outline-primary" type="submit" onClick={(e) => this.onClick(e)}>contract config</Button>
+                        <Button variant="outline-primary" type="submit" onClick={(e) => this.onContractConfig(e)}>contract config</Button>
                     </Row>
                 </Container>
                 <br/>

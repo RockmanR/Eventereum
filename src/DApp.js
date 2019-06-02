@@ -71,6 +71,7 @@ class App extends React.Component {
       Token.methods.isMinter(Crowdsale.address).call().then((result) => {
         if(result){
           this.setState({isMinter : true});
+          console.log('delete me: The minder is: ', result)
         } 
       });
       InsPlan.methods.isDepositer(Crowdsale.address).call().then((result) => {
@@ -143,18 +144,35 @@ class App extends React.Component {
   }
 
   //to be accessed from UserPanel.js
-  buyTokens() {
-    console.log("helloo")
-    //let address = this.props.state.web3Account0;
-    //let amount = 10000000000;
-    //Crowdsale.methods.buyTokens(address).send({from: address, value: amount}).then( response => {
-    //    console.log('buyToken respons: ',response);
-    //})
+  buyTokens(amount) {
+    //amount is multiplied by the price of the token
+    let weiAmount = 1000000000000000*amount;
+    let address = this.state.web3Account0;
+    console.log("delele me: attempt to buy tokens by: ", address)
+    Crowdsale.methods.buyTokens(address).send({from: address, value: weiAmount, gasPrice: "200000000000", gas: "200000"}).then( response => {
+        console.log('buyToken respons: ',response);
+    })
   }
+
+  //to be accessed from UserPanel.js
+  voteToReject() {
+    Token.methods.voteToReject().send().then( response => {
+        console.log('voteToReject respons: ',response);
+    })
+  }
+
+  //to be accessed from UserPanel.js
+  undoVoteToReject() {
+    Token.methods.undoVoteToReject().send().then( response => {
+        console.log('undoVoteToReject respons: ',response);
+    })
+  }
+
 
   //to be accessed from ConfigButton.js
   contractConfig() {
-    console.log("congract config")
+    //Token.methods.addMinter(Crowdsale.address).send({from: })
+    //console.log("congract config")
   }
 
   render() {
@@ -175,11 +193,12 @@ class App extends React.Component {
         <Timelines state={this.state}/>
         <FundingStatus state={this.state}/>
         <AddressDashboard state={this.state}/>
-        <UserPanel state={this.state} buyTokens={this.buyTokens}/>
+        <UserPanel state={this.state} buyTokens={this.buyTokens} voteToReject={this.voteToReject} undoVoteToReject={this.undoVoteToReject}/> 
         <ConfigButton contractConfig={this.contractConfig}/>
       </div>
     );
   }
 }
-
+//
+//
 export default App;

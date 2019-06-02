@@ -6,29 +6,34 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 
-import Token from '../embarkArtifacts/contracts/EventCrowdTokenImpl';
-import Crowdsale from '../embarkArtifacts/contracts/EventCrowdCrowdsaleImpl';
-
- 
 
 class UserPanel extends React.Component {
-
-
-    voteToReject() {
-        Token.methods.voteToReject().send().then( response => {
-            console.log('voteToReject respons: ',response);
-        })
+    constructor(props) {
+        super(props);
+        this.state = {
+            amount: ''        
+        }
     }
-
-    undoVoteToReject() {
-        Token.methods.undoVoteToReject().send().then( response => {
-            console.log('undoVoteToReject respons: ',response);
-        })
-    }
-
-    onClick(e) {
+    
+    onVoteToReject(e) {
         e.preventDefault();
-        this.props.buyTokens();
+        this.props.voteToReject();
+    }
+
+    onUndoVoteToReject(e) {
+        e.preventDefault();
+        this.props.undoVoteToReject();
+    }
+
+    onBuyTokens(e) {
+        e.preventDefault();
+        this.props.buyTokens(this.state.amount);
+    }
+
+    onChange(e) {
+        this.setState({
+            amount: e.target.value
+        })
     }
 
     render(){
@@ -69,12 +74,12 @@ class UserPanel extends React.Component {
                         <Form>
                             <Form.Row>
                                 <Form.Group as={Col} >
-                                    <Form.Control placeholder="Number of Token" />
+                                    <Form.Control placeholder="Number of Token" onChange={e => this.onChange(e)}/>
                                 </Form.Group>
                                 <Form.Group as={Col} >
                                     <Form.Control plaintext readOnly defaultValue="(amount) ether" />
                                 </Form.Group>
-                                <Button variant="primary" type="submit" onClick={(e)=>{this.onClick(e)}}>Buy Token</Button>
+                                <Button variant="primary" type="submit" onClick={e => this.onBuyTokens(e)}>Buy Token</Button>
                             </Form.Row>
                         </Form>
                     </Row>
