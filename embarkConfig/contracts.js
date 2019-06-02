@@ -59,7 +59,7 @@ module.exports = {
           token: '$EventCrowdTokenImpl',
           projectEscrow: '$InstalmentPlanImpl'
         }
-      },
+      }, 
       EventCrowdCrowdsale: {
         deploy: false,
         track: false
@@ -153,6 +153,14 @@ module.exports = {
         deploy: false,
         track: false
       }
+    },
+    afterDeploy: async (dependencies) => { /*
+      try{
+        await dependencies.contracts.EventCrowdTokenImpl.methods.addMinter(dependencies.contracts.EventCrowdCrowdsaleImpl.address).send({from: dependencies.web3.eth.defaultAccount});
+        await dependencies.contracts.InstalmentPlanImpl.methods.addDepositer(dependencies.contracts.EventCrowdCrowdsaleImpl.address).send({from: dependencies.web3.eth.defaultAccount});
+      } catch (e) {
+        console.error('Error during afterDeploy: ', e);
+      }*/
     }
   },
 

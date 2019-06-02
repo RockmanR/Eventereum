@@ -1,25 +1,24 @@
-// this is a configuraiton button to be DELETED later by replacing it with a better configuration right after the deployment
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 
 
-class ConfigButton extends React.Component {
+class AdminPanel extends React.Component {
 
-    onContractConfig(e){
+    onFinalize(e) {
         e.preventDefault();
-        this.props.contractConfig();
+        this.props.finalize();
     }
 
     render(){
 
         return(
             <div>
-                <h5>config button</h5>
+                <h5>Finalize</h5>
                 <Container>
                     <Row className="justify-content-sm-center bordered">
-                        <Button variant="outline-primary" type="submit" onClick={(e) => this.onContractConfig(e)}>contract config</Button>
+                        <Button variant="outline-primary" type="submit" onClick={(e) => this.onFinalize(e)}>Finalize contract</Button>
                     </Row>
                 </Container>
                 <br/>
@@ -30,4 +29,4 @@ class ConfigButton extends React.Component {
     }
 }
 
-export default ConfigButton;
+export default AdminPanel;
