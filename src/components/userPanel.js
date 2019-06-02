@@ -13,6 +13,7 @@ import Crowdsale from '../embarkArtifacts/contracts/EventCrowdCrowdsaleImpl';
 
 class UserPanel extends React.Component {
 
+
     voteToReject() {
         Token.methods.voteToReject().send().then( response => {
             console.log('voteToReject respons: ',response);
@@ -25,14 +26,9 @@ class UserPanel extends React.Component {
         })
     }
 
-    buyTokens(e) {
+    onClick(e) {
         e.preventDefault();
-        let address = this.props.state.web3Account0;
-        let amount = 10000000000;
-        Crowdsale.methods.buyTokens(address).send({from: address, value: amount}).then( response => {
-            //console.log('buyToken respons: ',response);
-            console.log('buyToken respons: ');
-        })
+        this.props.buyTokens();
     }
 
     render(){
@@ -78,7 +74,7 @@ class UserPanel extends React.Component {
                                 <Form.Group as={Col} >
                                     <Form.Control plaintext readOnly defaultValue="(amount) ether" />
                                 </Form.Group>
-                                <Button variant="primary" type="submit" onClick={(e)=>{this.buyTokens(e)}}>Buy Token</Button>
+                                <Button variant="primary" type="submit" onClick={(e)=>{this.onClick(e)}}>Buy Token</Button>
                             </Form.Row>
                         </Form>
                     </Row>
