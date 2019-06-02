@@ -4,8 +4,8 @@ import "./EventCrowdCrowdsale.sol";
 
 contract EventCrowdCrowdsaleImpl is EventCrowdCrowdsale  {
 
-    uint256 private _openingTime = now+120;
-    uint256 private _closingTime = now+10240;
+    uint256 private _openingTime = now+5;
+    uint256 private _closingTime = now+120;
     uint256 private _rate = 1;
     uint256 private _goal = 0.5 ether;
     uint256 private _cap = 1 ether;

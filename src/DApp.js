@@ -21,6 +21,7 @@ import Timelines from './components/Timelines';
 import FundingStatus from './components/FundingStatus';
 import UserPanel from './components/UserPanel';
 import ConfigButton from './components/ConfigButton';
+import AdminPanel from './components/AdminPanel';
 
 
 class App extends React.Component {
@@ -154,6 +155,13 @@ class App extends React.Component {
     })
   }
 
+  //to be accessed from AdminPanel.js
+  finalize() {
+    Crowdsale.methods.finalize().send().then( response => {
+      console.log('finalize respons: ', response);
+    })
+  }
+
   //to be accessed from UserPanel.js
   voteToReject() {
     Token.methods.voteToReject().send().then( response => {
@@ -194,7 +202,9 @@ class App extends React.Component {
         <FundingStatus state={this.state}/>
         <AddressDashboard state={this.state}/>
         <UserPanel state={this.state} buyTokens={this.buyTokens} voteToReject={this.voteToReject} undoVoteToReject={this.undoVoteToReject}/> 
+        <AdminPanel finalize={this.finalize} />
         <ConfigButton contractConfig={this.contractConfig}/>
+
       </div>
     );
   }
