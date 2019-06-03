@@ -15,16 +15,6 @@ class UserPanel extends React.Component {
         }
     }
     
-    onVoteToReject(e) {
-        e.preventDefault();
-        this.props.voteToReject();
-    }
-
-    onUndoVoteToReject(e) {
-        e.preventDefault();
-        this.props.undoVoteToReject();
-    }
-
     onBuyTokens(e) {
         e.preventDefault();
         this.props.buyTokens(this.state.amount);
@@ -46,12 +36,22 @@ class UserPanel extends React.Component {
         this.props.claimRefund();
     }
 
+    onVoteToReject(e) {
+        e.preventDefault();
+        this.props.voteToReject();
+    }
+
+    onUndoVoteToReject(e) {
+        e.preventDefault();
+        this.props.undoVoteToReject();
+    }
+
     render(){
 
         return(
             <div>
-                <h5>You are currently have:</h5>
-                <h2>{this.props.state.tokenBalance} Tokens</h2>
+                <h5>You have bought:</h5>
+                <h2>{this.props.state.tokenBought} Tokens</h2>
                 <br/>
                 <br/>
                 <br/>
@@ -103,7 +103,21 @@ class UserPanel extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>Withdraw tokens: </td>
-                                    <td><Button variant="outline-primary" type="submit" onClick={e => this.onWithdrawTokens(e)}>Withdraw Tokens</Button></td>
+                                    <td>
+                                        <Form>
+                                            <Form.Row>
+                                                <Form.Group as={Col} >
+                                                    <Button variant="outline-primary" type="submit" onClick={e => this.onWithdrawTokens(e)}>Withdraw Tokens</Button>
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Form.Control plaintext readOnly defaultValue="Tokens under control: " />
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Form.Control plaintext readOnly defaultValue={this.props.state.balanceOf} />
+                                                </Form.Group>
+                                            </Form.Row>
+                                        </Form>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Get refund: </td>
@@ -112,8 +126,22 @@ class UserPanel extends React.Component {
                                 <tr>
                                     <td>Instalment plan</td>
                                     <td>
-                                        <Button variant="outline-danger" type="submit">voteToReject</Button>
-                                        <Button variant="outline-primary" type="submit">undoVoteToReject</Button>
+                                        <Form>
+                                            <Form.Row>
+                                                <Form.Group as={Col} >
+                                                    <Button variant="outline-danger" type="submit" onClick={e => this.onVoteToReject(e)}>voteToReject</Button>
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Button variant="outline-secondary" type="submit" onClick={e => this.onUndoVoteToReject(e)}>undoVoteToReject</Button>
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Form.Control plaintext readOnly defaultValue="Current vote: " />
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Form.Control plaintext readOnly defaultValue={this.props.state.myVote} />
+                                                </Form.Group>
+                                            </Form.Row>
+                                        </Form>
                                     </td>
                                 </tr>
                             </tbody>

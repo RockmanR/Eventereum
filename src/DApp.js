@@ -48,7 +48,9 @@ class App extends React.Component {
       weiRaised: '',
       web3Account0: '',
       web3Account0_bal: '',
-      tokenBalance: ''
+      tokenBought: '',
+      myVote: '',
+      balanceOf: ''
     };
   }
 
@@ -74,6 +76,12 @@ class App extends React.Component {
           this.setState({isMinter : true});
           console.log('delete me: The minder is: ', result)
         } 
+      });
+      Token.methods.balanceOf(this.state.web3Account0).call().then((result) => {
+        this.setState({balanceOf : result});
+      });
+      Token.methods.myVote().call().then((result) => {
+        this.setState({myVote : result});
       });
       InsPlan.methods.isDepositer(Crowdsale.address).call().then((result) => {
         if(result){
@@ -137,8 +145,8 @@ class App extends React.Component {
         InsPlan.methods.depositsOf(accounts[0]).call().then(deposit => {
           let tokenPrice = new BigNumber(1000000000000000);
           let deposit_BIG = new BigNumber(deposit);
-          let tokenBalance_BIG = deposit_BIG.div(tokenPrice);
-          this.setState({tokenBalance: tokenBalance_BIG.toNumber()});
+          let tokenBought_BIG = deposit_BIG.div(tokenPrice);
+          this.setState({tokenBought: tokenBought_BIG.toNumber()});
         });
       }
     });
