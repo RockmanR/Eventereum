@@ -15,16 +15,6 @@ class UserPanel extends React.Component {
         }
     }
     
-    onVoteToReject(e) {
-        e.preventDefault();
-        this.props.voteToReject();
-    }
-
-    onUndoVoteToReject(e) {
-        e.preventDefault();
-        this.props.undoVoteToReject();
-    }
-
     onBuyTokens(e) {
         e.preventDefault();
         this.props.buyTokens(this.state.amount);
@@ -36,12 +26,32 @@ class UserPanel extends React.Component {
         })
     }
 
+    onWithdrawTokens(e) {
+        e.preventDefault();
+        this.props.withdrawTokens();
+    }
+
+    onClaimRefund(e) {
+        e.preventDefault();
+        this.props.claimRefund();
+    }
+
+    onVoteToReject(e) {
+        e.preventDefault();
+        this.props.voteToReject();
+    }
+
+    onUndoVoteToReject(e) {
+        e.preventDefault();
+        this.props.undoVoteToReject();
+    }
+
     render(){
 
         return(
             <div>
-                <h5>You are currently have:</h5>
-                <h2>{this.props.state.tokenBalance} Tokens</h2>
+                <h5>You have bought:</h5>
+                <h2>{this.props.state.tokenBought} Tokens</h2>
                 <br/>
                 <br/>
                 <br/>
@@ -68,7 +78,6 @@ class UserPanel extends React.Component {
                 <br/>
                 <br/>
                 <h5>Would you like to buy Tokens?</h5>
-
                 <Container>
                     <Row className="justify-content-sm-center bordered">
                         <Form>
@@ -92,13 +101,48 @@ class UserPanel extends React.Component {
                     <Row className="justify-content-sm-center bordered">
                         <Table bordered responsive >
                             <tbody>
-                            <tr>
-                                    <td>Instalment plan</td>
-                                    <td><Button variant="outline-danger" type="submit">voteToReject</Button> <Button variant="outline-primary" type="submit">undoVoteToReject</Button></td>
+                                <tr>
+                                    <td>Withdraw tokens: </td>
+                                    <td>
+                                        <Form>
+                                            <Form.Row>
+                                                <Form.Group as={Col} >
+                                                    <Button variant="outline-primary" type="submit" onClick={e => this.onWithdrawTokens(e)}>Withdraw Tokens</Button>
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Form.Control plaintext readOnly defaultValue="Tokens under control: " />
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Form.Control plaintext readOnly defaultValue={this.props.state.balanceOf} />
+                                                </Form.Group>
+                                            </Form.Row>
+                                        </Form>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Get refund: </td>
-                                    <td><Button variant="outline-primary" type="submit">Refund</Button></td>
+                                    <td><Button variant="outline-primary" type="submit" onClick={e => this.onClaimRefund(e)}>Claim refund</Button></td>
+                                </tr>
+                                <tr>
+                                    <td>Instalment plan</td>
+                                    <td>
+                                        <Form>
+                                            <Form.Row>
+                                                <Form.Group as={Col} >
+                                                    <Button variant="outline-danger" type="submit" onClick={e => this.onVoteToReject(e)}>voteToReject</Button>
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Button variant="outline-secondary" type="submit" onClick={e => this.onUndoVoteToReject(e)}>undoVoteToReject</Button>
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Form.Control plaintext readOnly defaultValue="Current vote: " />
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Form.Control plaintext readOnly defaultValue={this.props.state.myVote} />
+                                                </Form.Group>
+                                            </Form.Row>
+                                        </Form>
+                                    </td>
                                 </tr>
                             </tbody>
                         </Table>                    

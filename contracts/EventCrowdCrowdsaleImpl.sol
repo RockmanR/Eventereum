@@ -14,5 +14,5 @@ contract EventCrowdCrowdsaleImpl is EventCrowdCrowdsale  {
         public
         EventCrowdCrowdsale( token, projectEscrow, _openingTime, _closingTime, _rate, _goal, _cap) {
             //empty constructor
-        } 
+        }
 }

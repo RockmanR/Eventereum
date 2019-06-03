@@ -48,7 +48,9 @@ class App extends React.Component {
       weiRaised: '',
       web3Account0: '',
       web3Account0_bal: '',
-      tokenBalance: ''
+      tokenBought: '',
+      myVote: '',
+      balanceOf: ''
     };
   }
 
@@ -74,6 +76,12 @@ class App extends React.Component {
           this.setState({isMinter : true});
           console.log('delete me: The minder is: ', result)
         } 
+      });
+      Token.methods.balanceOf(this.state.web3Account0).call().then((result) => {
+        this.setState({balanceOf : result});
+      });
+      Token.methods.myVote().call().then((result) => {
+        this.setState({myVote : result});
       });
       InsPlan.methods.isDepositer(Crowdsale.address).call().then((result) => {
         if(result){
@@ -137,8 +145,8 @@ class App extends React.Component {
         InsPlan.methods.depositsOf(accounts[0]).call().then(deposit => {
           let tokenPrice = new BigNumber(1000000000000000);
           let deposit_BIG = new BigNumber(deposit);
-          let tokenBalance_BIG = deposit_BIG.div(tokenPrice);
-          this.setState({tokenBalance: tokenBalance_BIG.toNumber()});
+          let tokenBought_BIG = deposit_BIG.div(tokenPrice);
+          this.setState({tokenBought: tokenBought_BIG.toNumber()});
         });
       }
     });
@@ -155,10 +163,19 @@ class App extends React.Component {
     })
   }
 
-  //to be accessed from AdminPanel.js
-  finalize() {
-    Crowdsale.methods.finalize().send().then( response => {
-      console.log('finalize respons: ', response);
+  //to be accessed from UserPanel.js
+  withdrawTokens() {
+    let address = this.state.web3Account0;
+    Crowdsale.methods.withdrawTokens(address).send().then( response => {
+      console.log('withdrawTokens respons: ',response);
+    })
+  }
+
+  //to be accessed from UserPanel.js
+  claimRefund() {
+    let address = this.state.web3Account0;
+    Crowdsale.methods.claimRefund(address).send().then( response => {
+      console.log('claimRefund respons: ',response);
     })
   }
 
@@ -176,6 +193,12 @@ class App extends React.Component {
     })
   }
 
+  //to be accessed from AdminPanel.js
+  finalize() {
+    Crowdsale.methods.finalize().send().then( response => {
+      console.log('finalize respons: ', response);
+    })
+  }
 
   //to be accessed from ConfigButton.js
   contractConfig() {
@@ -201,7 +224,7 @@ class App extends React.Component {
         <Timelines state={this.state}/>
         <FundingStatus state={this.state}/>
         <AddressDashboard state={this.state}/>
-        <UserPanel state={this.state} buyTokens={this.buyTokens} voteToReject={this.voteToReject} undoVoteToReject={this.undoVoteToReject}/> 
+        <UserPanel state={this.state} buyTokens={this.buyTokens} withdrawTokens={this.withdrawTokens} claimRefund={this.claimRefund} voteToReject={this.voteToReject} undoVoteToReject={this.undoVoteToReject}/> 
         <AdminPanel finalize={this.finalize} />
         <ConfigButton contractConfig={this.contractConfig}/>
 
