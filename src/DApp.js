@@ -57,6 +57,7 @@ class App extends React.Component {
   componentDidMount() {
     this.getContractData();
     this.getAccountData();
+    this.getInstalmentPlanData();
   }
 
   getContractData(){
@@ -141,7 +142,7 @@ class App extends React.Component {
             web3Account0 : accounts[0],
             web3Account0_bal: balance
           });
-        })
+        });
         InsPlan.methods.depositsOf(accounts[0]).call().then(deposit => {
           let tokenPrice = new BigNumber(1000000000000000);
           let deposit_BIG = new BigNumber(deposit);
@@ -149,6 +150,12 @@ class App extends React.Component {
           this.setState({tokenBought: tokenBought_BIG.toNumber()});
         });
       }
+    });
+  }
+
+  getInstalmentPlanData() {
+    InsPlan.methods.instalmentDetails(0).call().then(array => {
+      console.log('Instalment array: ',array);
     });
   }
 
