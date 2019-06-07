@@ -1,6 +1,6 @@
 pragma experimental ABIEncoderV2;
 
-import "./InstalmentPlan.sol";
+import "./InstalmentPlan.sol"; 
 
 contract InstalmentPlanImpl is InstalmentPlan {
 

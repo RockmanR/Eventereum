@@ -1,6 +1,6 @@
 pragma experimental ABIEncoderV2;
 
-import "./ProjectEscrow.sol";
+import "./ProjectEscrow.sol"; 
 
 contract InstalmentPlan is ProjectEscrow {
 
@@ -70,9 +70,9 @@ contract InstalmentPlan is ProjectEscrow {
      * @param no The number of instalment to get the detail of
      * @return The details of the instalment in a 'struct' format/memory
      */
-    function instalmentDetails(uint256 no) public view returns (Instalments memory) {
+    function instalmentDetails(uint256 no) public view returns (uint256 amount, uint256 dueTime) {
         require(no <= noOfInstalments(), "InstalmentPlan: there is no such instalment number.");
-        return _instalments[no];
+        return (_instalments[no].amount, _instalments[no].dueTime);
     }
 
     /**
