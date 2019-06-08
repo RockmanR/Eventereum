@@ -8,6 +8,7 @@ contract InstalmentPlan is ProjectEscrow {
     struct Instalments {
         uint256 amount;
         uint256 dueTime;
+        bool withdrawn;
     }
 
     // to keep a record of all instalments in an array of 'Instalments'
@@ -33,10 +34,10 @@ contract InstalmentPlan is ProjectEscrow {
         )
     public ProjectEscrow(vToken) {
         _beneficiary = beneficiary;
-        _instalments.push(Instalments(0,0));
-        _instalments.push(Instalments(0, lastDue));
-        _instalments.push(Instalments(amount2, due2));
-        _instalments.push(Instalments(amount1, due1));
+        _instalments.push(Instalments(0, 0, false));
+        _instalments.push(Instalments(0, lastDue, false));
+        _instalments.push(Instalments(amount2, due2, false));
+        _instalments.push(Instalments(amount1, due1, false));
         _nextInstalmentNo = _instalments.length-1;
     }
 
@@ -70,9 +71,9 @@ contract InstalmentPlan is ProjectEscrow {
      * @param no The number of instalment to get the detail of
      * @return The details of the instalment in a 'struct' format/memory
      */
-    function instalmentDetails(uint256 no) public view returns (uint256 amount, uint256 dueTime) {
+    function instalmentDetails(uint256 no) public view returns (uint256 amount, uint256 dueTime, bool withdrawn) {
         require(no <= noOfInstalments(), "InstalmentPlan: there is no such instalment number.");
-        return (_instalments[no].amount, _instalments[no].dueTime);
+        return (_instalments[no].amount, _instalments[no].dueTime, _instalments[no].withdrawn);
     }
 
     /**
@@ -95,7 +96,7 @@ contract InstalmentPlan is ProjectEscrow {
      * @dev to release a next instalment to a beneficiary.
      * This function can be improved with a beneficiary Role, for modularity purposes.
      */
-    function releaseInstalment() public returns (bool)  {
+    function releaseInstallment() public returns (bool)  {
         require(_beneficiary == msg.sender, "InstalmentPlan: only beneficiary can request to release an instalment.");
         require(refundingState() == false, "InstalmentPlan: can't release instalment, due to majority rejection.");
         uint256 no = nextInstalmentNo();
@@ -110,5 +111,6 @@ contract InstalmentPlan is ProjectEscrow {
             _releasePayment(_beneficiary, (address(this).balance));
         }
         _nextInstalmentNo = _nextInstalmentNo.sub(1);
+        _instalments[no].withdrawn = true;
     }
 }
