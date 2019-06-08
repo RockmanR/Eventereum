@@ -2,6 +2,8 @@
 
 import './App.css';
 import React from 'react';
+import Tabs from 'react-bootstrap/Tabs';
+import Tab from 'react-bootstrap/Tab';
 
 //importing web3 API
 import EmbarkJS from './embarkArtifacts/embarkjs';
@@ -32,6 +34,7 @@ class App extends React.Component {
       TokenAddr: '',
       InsPlanAddr: '',
       CrowdsaleAddr: '',
+      beneficiary: '',
       isMinter: false,
       isDepositer: false,
       isOpen: false, 
@@ -74,6 +77,7 @@ class App extends React.Component {
           loading: false
         });
       }
+      // Getting data from Token contract
       Token.methods.isMinter(Crowdsale.address).call().then((result) => {
         if(result){
           this.setState({isMinter : true});
@@ -86,11 +90,18 @@ class App extends React.Component {
       Token.methods.myVote().call().then((result) => {
         this.setState({myVote : result});
       });
+      // Getting data from InstallmentPlan contract
       InsPlan.methods.isDepositer(Crowdsale.address).call().then((result) => {
         if(result){
           this.setState({isDepositer : true});
         }
       });
+      InsPlan.methods.getBeneficiary().call().then((result) => {
+        if(result){
+          this.setState({beneficiary : result});
+        }
+      });
+      // Getting data from Crowdsale contract
       Crowdsale.methods.isOpen().call().then((result) => {
         if(result){
           this.setState({isOpen : true});
@@ -177,15 +188,17 @@ class App extends React.Component {
         // Create a new JavaScript Date object based on the timestamp
         // multiplied by 1000 so that the argument is in milliseconds, not seconds.
         var date = new Date(unix_timestamp*1000);
-        // Hours part from the timestamp
+        // Months from Date() will be in array
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var year = date.getFullYear();
+        var month = months[date.getMonth()];
+        var day = date.getDate(); 
         var hours = date.getHours();
-        // Minutes part from the timestamp
         var minutes = "0" + date.getMinutes();
-        // Seconds part from the timestamp
         var seconds = "0" + date.getSeconds();
-        // Will display time in 10:30:23 format
-        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-        // return the time in string
+        // Will display time in dd mm yyyy - hh:mm:ss format
+        var formattedTime = day + ' ' + month + ' ' + year + ' - ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+        // return the time as string
         return formattedTime;
   }
 
@@ -255,16 +268,32 @@ class App extends React.Component {
     return (
       <div className='App'>
         <br/>
-        <h1>Event Crowd</h1>
+        <h1>Eventereum</h1>
+        <h5>An open source platform for tokenizing events</h5>
         <br/>
         <br/>
-        <CrowdsalePhases state={this.state}/>
-        <Timelines state={this.state}/>
-        <FundingStatus state={this.state}/>
-        <AddressDashboard state={this.state}/>
-        <InstallmentPlan state={this.state} timeConverter={this.timeConverter}/>
-        <UserPanel state={this.state} buyTokens={this.buyTokens} withdrawTokens={this.withdrawTokens} claimRefund={this.claimRefund} voteToReject={this.voteToReject} undoVoteToReject={this.undoVoteToReject}/> 
-        <AdminPanel finalize={this.finalize} releaseInstallment={this.releaseInstallment} />
+          <Tabs defaultActiveKey="contractStatus" id="uncontrolled-tab-example">
+            <Tab eventKey="contractStatus" title="Contract status">
+              <br/>
+              <br/>
+              <CrowdsalePhases state={this.state}/>
+              <Timelines state={this.state} timeConverter={this.timeConverter} />
+              <FundingStatus state={this.state}/>
+              <AddressDashboard state={this.state}/>
+              <InstallmentPlan state={this.state} timeConverter={this.timeConverter}/>
+            </Tab>
+            <Tab eventKey="userPanel" title="User Panel">
+              <UserPanel state={this.state} buyTokens={this.buyTokens} withdrawTokens={this.withdrawTokens} claimRefund={this.claimRefund} voteToReject={this.voteToReject} undoVoteToReject={this.undoVoteToReject}/> 
+            </Tab>
+            <Tab eventKey="adminPanel" title="Admin Panel">
+              <br/>
+              <br/>
+              <AdminPanel finalize={this.finalize} releaseInstallment={this.releaseInstallment} />
+            </Tab>
+          </Tabs>
+        <br/>
+        <br/>
+        <br/>
       </div>
     );
   }

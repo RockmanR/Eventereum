@@ -48,9 +48,9 @@ class FundingStatus extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Token bought: {tokenBought.toNumber()}</td> 
-                                    <td>Wei Raised: {this.props.state.weiRaised}</td>
-                                    <td>Goal: {this.props.state.goal}</td>
-                                    <td>Hard Cap: {this.props.state.cap}</td> 
+                                    <td>Raised: {this.props.state.weiRaised} wei</td>
+                                    <td>Goal: {this.props.state.goal} wei</td>
+                                    <td>Hard Cap: {this.props.state.cap} wei</td> 
                                     <td>Goal reached: {(this.props.state.goalReached).toString()}</td>
                                 </tr>
                             </tbody>
