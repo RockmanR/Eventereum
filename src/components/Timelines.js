@@ -9,7 +9,11 @@ class Timelines extends React.Component {
 
         let percTimeToOpen = (this.props.state.timeToOpen/this.props.state.contractPeriod)*100;
         let percTimeToClose = (this.props.state.timeToClose/this.props.state.contractPeriod)*100;
-        
+        let closingTime = this.props.timeConverter(this.props.state.closingTime);
+        let openingTime = this.props.timeConverter(this.props.state.openingTime);
+        let timeToClose = this.props.state.timeToClose;
+        let timeToOpen = this.props.state.timeToOpen;
+
         const progressInstance = (
           <ProgressBar>
             <ProgressBar striped now={percTimeToClose} variant="success" key={1}/>
@@ -28,10 +32,10 @@ class Timelines extends React.Component {
                                     <td colSpan="4">{progressInstance}</td>
                                 </tr>
                                 <tr>
-                                    <td>Date/Time to close: {this.props.state.closingTime}</td>
-                                    <td>Time left to close: {this.props.state.timeToClose}</td>
-                                    <td>Date/Time to open: {this.props.state.openingTime}</td>
-                                    <td>Time left to open: {this.props.state.timeToOpen}</td>
+                                    <td>Closing Time: {closingTime}</td>
+                                    <td>Time left to close: {timeToClose} sec</td>
+                                    <td>Opening Time: {openingTime}</td>
+                                    <td>Time left to open: {timeToOpen} sec</td>
                                 </tr>
                             </tbody>
                         </Table>

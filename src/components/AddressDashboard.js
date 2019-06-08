@@ -9,6 +9,7 @@ class AddressDashboard extends React.Component {
         let statusMinter;
         let statusDepositer;
         let statusCrowdsale;
+        let beneficiary = this.props.state.beneficiary;
 
         if(this.props.state.isMinter){
             statusMinter = <a>Ready 👍</a>;
@@ -65,8 +66,8 @@ class AddressDashboard extends React.Component {
                                 </tr>
                                 <tr>
                                     <td>Beneficiary address</td>
-                                    <td> {this.props.state.CrowdsaleAddr} </td>
-                                    <td> (later) </td>
+                                    <td> {beneficiary} </td>
+                                    <td> - </td>
                                 </tr>
                             </tbody>
                         </Table>

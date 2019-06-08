@@ -15,4 +15,8 @@ contract InstalmentPlanImpl is InstalmentPlan {
     InstalmentPlan(_beneficiary, vToken, _amount1, _due1, _amount2, _due2, _lastDue) {
         //empty constructor
     }
+
+    function getBeneficiary() public view returns (address beneficiary) {
+        return _beneficiary;
+    }
 }

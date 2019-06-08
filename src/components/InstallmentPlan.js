@@ -7,9 +7,9 @@ import Table from 'react-bootstrap/Table';
 class InstallmentPlan extends React.Component {
     render(){
         let currentTime = new Date();
-        let withdrawn_stat1 = this.props.state.installment_1.withdrawn;
-        let withdrawn_stat2 = this.props.state.installment_2.withdrawn;
-        let withdrawn_stat3 = this.props.state.installment_3.withdrawn;
+        let withdrawn_stat1 = (this.props.state.installment_1.withdrawn).toString();
+        let withdrawn_stat2 = (this.props.state.installment_2.withdrawn).toString();
+        let withdrawn_stat3 = (this.props.state.installment_3.withdrawn).toString();
         let amount1 = this.props.state.installment_1.amount;
         let amount2 = this.props.state.installment_2.amount;
         let amount3 = this.props.state.installment_3.amount;
@@ -18,11 +18,10 @@ class InstallmentPlan extends React.Component {
         let dueTime3_unix = this.props.state.installment_3.dueTime;
         let dueTime1 = this.props.timeConverter(dueTime1_unix);
         let dueTime2 = this.props.timeConverter(dueTime2_unix);
-        let dueTime3 = this.props.timeConverter(dueTime3_unix);
-        
-        let timeLeft1_uinx = dueTime1_unix - (currentTime/1000);
-        let timeLeft2_uinx = dueTime2_unix - (currentTime/1000);
-        let timeLeft3_uinx = dueTime3_unix - (currentTime/1000);
+        let dueTime3 = this.props.timeConverter(dueTime3_unix);  
+        let timeLeft1_uinx = Math.ceil(dueTime1_unix - (currentTime/1000));
+        let timeLeft2_uinx = Math.ceil(dueTime2_unix - (currentTime/1000));
+        let timeLeft3_uinx = Math.ceil(dueTime3_unix - (currentTime/1000));
 
 
         return(
@@ -48,24 +47,24 @@ class InstallmentPlan extends React.Component {
                             <tbody>
                             <tr>
                                     <td>1</td>
-                                    <td> {amount1} </td>
+                                    <td> {amount1} wei</td>
                                     <td> {dueTime1} </td>
-                                    <td> {timeLeft1_uinx} </td>
-                                    <td> {withdrawn_stat1.toString()} </td>
+                                    <td> {timeLeft1_uinx} sec</td>
+                                    <td> {withdrawn_stat1} </td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
-                                    <td> {amount2} </td>
+                                    <td> {amount2} wei</td>
                                     <td> {dueTime2} </td>
-                                    <td> {timeLeft2_uinx} </td>
-                                    <td> {withdrawn_stat2.toString()} </td>
+                                    <td> {timeLeft2_uinx} sec</td>
+                                    <td> {withdrawn_stat2} </td>
                                 </tr>
                                 <tr>
                                     <td>3</td>
-                                    <td> {amount3} </td>
+                                    <td> All the rest </td>
                                     <td> {dueTime3} </td>
-                                    <td> {timeLeft3_uinx} </td>
-                                    <td> {withdrawn_stat3.toString()} </td>
+                                    <td> {timeLeft3_uinx} sec</td>
+                                    <td> {withdrawn_stat3} </td>
                                 </tr>
                             </tbody>
                         </Table>

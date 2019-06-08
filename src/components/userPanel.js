@@ -50,12 +50,9 @@ class UserPanel extends React.Component {
 
         return(
             <div>
-                <h5>You have bought:</h5>
-                <h2>{this.props.state.tokenBought} Tokens</h2>
                 <br/>
                 <br/>
-                <br/>
-                <h5>Make sure you are using the right account:</h5>
+
                 <Container>
                     <Row className="justify-content-sm-center bordered">
                         <Table striped bordered responsive >
@@ -77,33 +74,40 @@ class UserPanel extends React.Component {
                 <br/>
                 <br/>
                 <br/>
-                <h5>Would you like to buy Tokens?</h5>
-                <Container>
-                    <Row className="justify-content-sm-center bordered">
-                        <Form>
-                            <Form.Row>
-                                <Form.Group as={Col} >
-                                    <Form.Control placeholder="Number of Token" onChange={e => this.onChange(e)}/>
-                                </Form.Group>
-                                <Form.Group as={Col} >
-                                    <Form.Control plaintext readOnly defaultValue="(amount) ether" />
-                                </Form.Group>
-                                <Button variant="primary" type="submit" onClick={e => this.onBuyTokens(e)}>Buy Token</Button>
-                            </Form.Row>
-                        </Form>
-                    </Row>
-                </Container>
+
+                <h5>You have bought:</h5>
+                <h2>{this.props.state.tokenBought} Tokens</h2>
                 <br/>
                 <br/>
                 <br/>
-                <h5>Other controls</h5>
+
                 <Container>
                     <Row className="justify-content-sm-center bordered">
                         <Table bordered responsive >
                             <tbody>
                                 <tr>
-                                    <td>Withdraw tokens: </td>
                                     <td>
+                                        Buy tokens
+                                    </td>
+                                    <td>
+                                        <Form>
+                                            <Form.Row>
+                                                <Form.Group as={Col} >
+                                                    <Form.Control placeholder="Number of Token" onChange={e => this.onChange(e)}/>
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Form.Control plaintext readOnly defaultValue="(amount) ether" />
+                                                </Form.Group>
+                                                <Form.Group as={Col} >
+                                                    <Button variant="primary" type="submit" onClick={e => this.onBuyTokens(e)}>Buy Token</Button>
+                                                </Form.Group>
+                                            </Form.Row>
+                                        </Form>                                    
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Withdraw tokens</td>
+                                    <td>    
                                         <Form>
                                             <Form.Row>
                                                 <Form.Group as={Col} >
@@ -120,7 +124,7 @@ class UserPanel extends React.Component {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Get refund: </td>
+                                    <td>Get refund</td>
                                     <td><Button variant="outline-primary" type="submit" onClick={e => this.onClaimRefund(e)}>Claim refund</Button></td>
                                 </tr>
                                 <tr>
