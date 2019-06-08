@@ -20,9 +20,8 @@ import CrowdsalePhases from './components/CrowdsalePhases';
 import Timelines from './components/Timelines';
 import FundingStatus from './components/FundingStatus';
 import UserPanel from './components/UserPanel';
-import ConfigButton from './components/ConfigButton';
 import AdminPanel from './components/AdminPanel';
-
+import InstallmentPlan from './components/InstallmentPlan';
 
 class App extends React.Component {
   constructor(props) {
@@ -50,7 +49,10 @@ class App extends React.Component {
       web3Account0_bal: '',
       tokenBought: '',
       myVote: '',
-      balanceOf: ''
+      balanceOf: '',
+      installment_1: '',
+      installment_2: '',
+      installment_3: ''
     };
   }
 
@@ -103,7 +105,7 @@ class App extends React.Component {
       Crowdsale.methods.closingTime().call().then((result) => {
         this.setState({closingTime : result});
       });
-      Crowdsale.methods.timeToClose().call().then((result) => {
+      Crowdsale.methods.timeToClose().call().then((result) => {  // I can eleminate this function and use JS's Date() function to find out 'now'
         this.setState({timeToClose : result});
       });
       Crowdsale.methods.contractPeriod().call().then((result) => {
@@ -154,9 +156,37 @@ class App extends React.Component {
   }
 
   getInstalmentPlanData() {
-    InsPlan.methods.instalmentDetails(0).call().then(array => {
-      console.log('Instalment array: ',array);
+    InsPlan.methods.instalmentDetails(3).call().then(obj => {
+      this.setState({
+        installment_1: obj
+      })
     });
+    InsPlan.methods.instalmentDetails(2).call().then(obj => {
+      this.setState({
+        installment_2: obj
+      })
+    });
+    InsPlan.methods.instalmentDetails(1).call().then(obj => {
+      this.setState({
+        installment_3: obj
+      })
+    });
+  }
+
+  timeConverter(unix_timestamp){
+        // Create a new JavaScript Date object based on the timestamp
+        // multiplied by 1000 so that the argument is in milliseconds, not seconds.
+        var date = new Date(unix_timestamp*1000);
+        // Hours part from the timestamp
+        var hours = date.getHours();
+        // Minutes part from the timestamp
+        var minutes = "0" + date.getMinutes();
+        // Seconds part from the timestamp
+        var seconds = "0" + date.getSeconds();
+        // Will display time in 10:30:23 format
+        var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+        // return the time in string
+        return formattedTime;
   }
 
   //to be accessed from UserPanel.js
@@ -207,10 +237,11 @@ class App extends React.Component {
     })
   }
 
-  //to be accessed from ConfigButton.js
-  contractConfig() {
-    //Token.methods.addMinter(Crowdsale.address).send({from: })
-    //console.log("congract config")
+  //to be accessed from AdminPanel.js
+  releaseInstallment() {
+    InsPlan.methods.releaseInstallment().send().then( response => {
+      console.log('release installment respons: ', response);
+    })
   }
 
   render() {
@@ -231,10 +262,9 @@ class App extends React.Component {
         <Timelines state={this.state}/>
         <FundingStatus state={this.state}/>
         <AddressDashboard state={this.state}/>
+        <InstallmentPlan state={this.state} timeConverter={this.timeConverter}/>
         <UserPanel state={this.state} buyTokens={this.buyTokens} withdrawTokens={this.withdrawTokens} claimRefund={this.claimRefund} voteToReject={this.voteToReject} undoVoteToReject={this.undoVoteToReject}/> 
-        <AdminPanel finalize={this.finalize} />
-        <ConfigButton contractConfig={this.contractConfig}/>
-
+        <AdminPanel finalize={this.finalize} releaseInstallment={this.releaseInstallment} />
       </div>
     );
   }
