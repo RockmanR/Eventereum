@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import Table from 'react-bootstrap/Table';
 import BigNumber from 'bignumber.js';
-import { compileFunction } from 'vm';
+//import { compileFunction } from 'vm';
 
 class FundingStatus extends React.Component {
     render(){
