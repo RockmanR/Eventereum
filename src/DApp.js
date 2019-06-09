@@ -1,22 +1,23 @@
-/*global web3*/
+// below line is actually a command to make the global web3 available
+/* global web3 */
 
-import './App.css';
+// Importing React
 import React from 'react';
+import './App.css';
+
+// Importing react-bootstrap components
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 
-//importing web3 API
+// Importing the web3 API
 import EmbarkJS from './embarkArtifacts/embarkjs';
 
-//importing other nesesities
-import BigNumber from 'bignumber.js';
-
-//importing contracts
+// Importing contract artifacts
 import Token from './embarkArtifacts/contracts/EventCrowdTokenImpl';
 import InsPlan from './embarkArtifacts/contracts/InstalmentPlanImpl';
 import Crowdsale from './embarkArtifacts/contracts/EventCrowdCrowdsaleImpl';
 
-//importing components
+// Importing components
 import AddressDashboard from './components/AddressDashboard';
 import CrowdsalePhases from './components/CrowdsalePhases';
 import Timelines from './components/Timelines';
@@ -25,47 +26,83 @@ import UserPanel from './components/UserPanel';
 import AdminPanel from './components/AdminPanel';
 import InstallmentPlan from './components/InstallmentPlan';
 
+// Importing BigNumber for big number calculations
+import BigNumber from 'bignumber.js';
+
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      // A status to load the page
       loading: true,
+      // An error message, used if EmbarkJS failed to launch
       error: '',
+      // To set the address of the Token contract
       TokenAddr: '',
+      // To set the address of the InstalmentPlan contract
       InsPlanAddr: '',
+      // To set the address of the Crowdsale contract
       CrowdsaleAddr: '',
+      // To set the beneficiary of the InstalmentPlan contract
       beneficiary: '',
+      // To set the isMinter status for the Crowdsale contract. If true, then Crowdsale can mint the tokens in Token contract
       isMinter: false,
+      // To set the isDepositer status for the Crowdsale contract. If true, then Crowdesale can deposit ether in InstalmentPlan contract
       isDepositer: false,
-      isOpen: false, 
+      // To set the opening status for the Crowdsale contract. If false, then no one can buy tokens/send ether to Crowdsale contract
+      isOpen: false,
+      // The date and time to open the Crowdsale contract
       openingTime: '',
-      timeToOpen: 0,
-      timeToClose: '',
+      // The date and time to close the Crowdsale contract
       closingTime: '',
+      // The number of seconds left to open the Crowdsale contract
+      timeToOpen: 0,
+      // The number of seconds left to close the Crowdsale contract
+      timeToClose: '',
+      // The number of seconds from the time the contract gets deployed to the time it gets closed
       contractPeriod: '',
+      // A cap for Crowdsale contract, to limit the number of ether/funding received
       cap: '',
+      // The funding goal of the Crowdsale contract
       goal: '',
+      // The status of the Crowdsale funding goal (boolean)
       goalReached: '',
+      // The 'finalized' status of the Crowdsale (refer to the contract for more details)
       finalized: '',
+      // The amount of ether (as wei) raised by Crowdsale contract
       weiRaised: '',
-      web3Account0: '',
-      web3Account0_bal: '',
+      // The number of token bought
       tokenBought: '',
+      // The vote of the default account for the InstalmentPlan contract
       myVote: '',
-      balanceOf: '',
+      // The details of the 1st instalment (as object) from the InstamentPlan contract
       installment_1: '',
+      // The details of the 2nd instalment (as object) from the InstamentPlan contract
       installment_2: '',
-      installment_3: ''
+      // The details of the 3rd instalment (as object) from the InstamentPlan contract
+      installment_3: '',
+      // The default account in web3 (i.e. MetaMask)
+      web3Account0: '',
+      // The balance of the default account in web3
+      web3Account0_bal: '',
+      // The token balance for the default account
+      balanceOf: '',
     };
   }
 
   componentDidMount() {
+    // To get the details for the 3 main contracts involved (Token, Crowdsale, InstalmentPlan)
     this.getContractData();
+    // To get the details of the default account in use (i.e. MetaMask)
     this.getAccountData();
-    this.getInstalmentPlanData();
+
+    //this.getInstalmentPlanData();
   }
 
-  getContractData(){
+    // To get the details for the 3 main contracts involved (Token, Crowdsale, InstalmentPlan)
+    getContractData(){
+    // I guess this checks if the Ethereum node is connected and functional
     EmbarkJS.onReady((err) => {
       if (err) {
         this.setState({
@@ -77,7 +114,8 @@ class App extends React.Component {
           loading: false
         });
       }
-      // Getting data from Token contract
+
+      // Getting data from the Token contract
       Token.methods.isMinter(Crowdsale.address).call().then((result) => {
         if(result){
           this.setState({isMinter : true});
@@ -90,10 +128,11 @@ class App extends React.Component {
       Token.methods.myVote().call().then((result) => {
         this.setState({myVote : result});
       });
-      // Getting data from InstallmentPlan contract
+
+      // Getting data from the InstalmentPlan contract
       InsPlan.methods.isDepositer(Crowdsale.address).call().then((result) => {
         if(result){
-          this.setState({isDepositer : true});
+          this.setState({isDepositer : result});
         }
       });
       InsPlan.methods.getBeneficiary().call().then((result) => {
@@ -101,10 +140,26 @@ class App extends React.Component {
           this.setState({beneficiary : result});
         }
       });
-      // Getting data from Crowdsale contract
+      InsPlan.methods.instalmentDetails(3).call().then(obj => {
+        this.setState({
+          installment_1: obj
+        })
+      });
+      InsPlan.methods.instalmentDetails(2).call().then(obj => {
+        this.setState({
+          installment_2: obj
+        })
+      });
+      InsPlan.methods.instalmentDetails(1).call().then(obj => {
+        this.setState({
+          installment_3: obj
+        })
+      });
+  
+      // Getting data from the Crowdsale contract
       Crowdsale.methods.isOpen().call().then((result) => {
         if(result){
-          this.setState({isOpen : true});
+          this.setState({isOpen : result});
         }
       });
       Crowdsale.methods.openingTime().call().then((result) => {
@@ -116,7 +171,8 @@ class App extends React.Component {
       Crowdsale.methods.closingTime().call().then((result) => {
         this.setState({closingTime : result});
       });
-      Crowdsale.methods.timeToClose().call().then((result) => {  // I can eleminate this function and use JS's Date() function to find out 'now'
+      // This call needs to be removed, and replaced by JS's Date() function to find out the 'now'
+      Crowdsale.methods.timeToClose().call().then((result) => {
         this.setState({timeToClose : result});
       });
       Crowdsale.methods.contractPeriod().call().then((result) => {
@@ -145,7 +201,8 @@ class App extends React.Component {
     });
   }
 
-  getAccountData() {
+    // To get the details of the default account in use (i.e. MetaMask)
+    getAccountData() {
     web3.eth.getAccounts( (error, accounts) => {
       if(error) {
         console.log('Can not connect to web3 accounts..',error);
@@ -163,24 +220,6 @@ class App extends React.Component {
           this.setState({tokenBought: tokenBought_BIG.toNumber()});
         });
       }
-    });
-  }
-
-  getInstalmentPlanData() {
-    InsPlan.methods.instalmentDetails(3).call().then(obj => {
-      this.setState({
-        installment_1: obj
-      })
-    });
-    InsPlan.methods.instalmentDetails(2).call().then(obj => {
-      this.setState({
-        installment_2: obj
-      })
-    });
-    InsPlan.methods.instalmentDetails(1).call().then(obj => {
-      this.setState({
-        installment_3: obj
-      })
     });
   }
 
@@ -298,6 +337,6 @@ class App extends React.Component {
     );
   }
 }
-//
-//
+
+
 export default App;

@@ -11,7 +11,7 @@ class UserPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            amount: ''        
+            amount: '',
         }
     }
     
@@ -47,7 +47,6 @@ class UserPanel extends React.Component {
     }
 
     render(){
-
         return(
             <div>
                 <br/>
@@ -65,7 +64,7 @@ class UserPanel extends React.Component {
                             <tbody>
                                 <tr>
                                     <td>{this.props.state.web3Account0}</td>
-                                    <td>{this.props.state.web3Account0_bal}</td>
+                                    <td>{this.props.state.web3Account0_bal} wei</td>
                                 </tr>
                             </tbody>
                         </Table>                    
@@ -94,9 +93,6 @@ class UserPanel extends React.Component {
                                             <Form.Row>
                                                 <Form.Group as={Col} >
                                                     <Form.Control placeholder="Number of Token" onChange={e => this.onChange(e)}/>
-                                                </Form.Group>
-                                                <Form.Group as={Col} >
-                                                    <Form.Control plaintext readOnly defaultValue="(amount) ether" />
                                                 </Form.Group>
                                                 <Form.Group as={Col} >
                                                     <Button variant="primary" type="submit" onClick={e => this.onBuyTokens(e)}>Buy Token</Button>
