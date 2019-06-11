@@ -4,24 +4,51 @@ import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
 
 
-class InstallmentPlan extends React.Component {
+class InstalmentPlan extends React.Component {
     render(){
         let currentTime = new Date();
-        let withdrawn_stat1 = (this.props.state.installment_1.withdrawn).toString();
-        let withdrawn_stat2 = (this.props.state.installment_2.withdrawn).toString();
-        let withdrawn_stat3 = (this.props.state.installment_3.withdrawn).toString();
-        let amount1 = this.props.state.installment_1.amount;
-        let amount2 = this.props.state.installment_2.amount;
-        let amount3 = this.props.state.installment_3.amount;
-        let dueTime1_unix = this.props.state.installment_1.dueTime;
-        let dueTime2_unix = this.props.state.installment_2.dueTime;
-        let dueTime3_unix = this.props.state.installment_3.dueTime;
-        let dueTime1 = this.props.timeConverter(dueTime1_unix);
-        let dueTime2 = this.props.timeConverter(dueTime2_unix);
-        let dueTime3 = this.props.timeConverter(dueTime3_unix);  
-        let timeLeft1_uinx = Math.ceil(dueTime1_unix - (currentTime/1000));
-        let timeLeft2_uinx = Math.ceil(dueTime2_unix - (currentTime/1000));
-        let timeLeft3_uinx = Math.ceil(dueTime3_unix - (currentTime/1000));
+
+        let withdrawn_stat1;
+        let withdrawn_stat2;
+        let withdrawn_stat3;
+        let amount1;
+        let amount2;
+        // the third amount  
+        //let amount3 = this.props.state.instalment_3.amount;
+        let dueTime1_unix;
+        let dueTime2_unix;
+        let dueTime3_unix;
+        let dueTime1;
+        let dueTime2;
+        let dueTime3;  
+        let timeLeft1_uinx;
+        let timeLeft2_uinx;
+        let timeLeft3_uinx;
+
+        // I'm keeping the variable difinitions inside this 'if' statement to make sure the state in DApp.js gets updated before they gets assigned here. 
+        // otherwise we get an error that the 'instalment_x' object is undifined.
+        // I'm sure there is a better solution for this, but I'm bad at React at the moment
+        if (this.props.state.instalment_1 && this.props.state.instalment_2 && this.props.state.instalment_3) {
+            withdrawn_stat1 = (this.props.state.instalment_1.withdrawn).toString();
+            withdrawn_stat2 = (this.props.state.instalment_2.withdrawn).toString();
+            withdrawn_stat3 = (this.props.state.instalment_3.withdrawn).toString();
+            amount1 = this.props.state.instalment_1.amount;
+            amount2 = this.props.state.instalment_2.amount;
+            // the third amount  
+            //let amount3 = this.props.state.instalment_3.amount;
+            dueTime1_unix = this.props.state.instalment_1.dueTime;
+            dueTime2_unix = this.props.state.instalment_2.dueTime;
+            dueTime3_unix = this.props.state.instalment_3.dueTime;
+            dueTime1 = this.props.timeConverter(dueTime1_unix);
+            dueTime2 = this.props.timeConverter(dueTime2_unix);
+            dueTime3 = this.props.timeConverter(dueTime3_unix);  
+            timeLeft1_uinx = Math.ceil(dueTime1_unix - (currentTime/1000));
+            timeLeft2_uinx = Math.ceil(dueTime2_unix - (currentTime/1000));
+            timeLeft3_uinx = Math.ceil(dueTime3_unix - (currentTime/1000));
+        } else {
+            console.log('The instalment details are not populated yet...')
+        }
+
 
 
         return(
@@ -78,4 +105,4 @@ class InstallmentPlan extends React.Component {
     }
 }
 
-export default InstallmentPlan;
+export default InstalmentPlan;

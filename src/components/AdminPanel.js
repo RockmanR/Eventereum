@@ -10,9 +10,9 @@ class AdminPanel extends React.Component {
         this.props.finalize();
     }
 
-    onReleaseInstallment(e) {
+    onReleaseInstalment(e) {
         e.preventDefault();
-        this.props.releaseInstallment();
+        this.props.releaseInstalment();
     }
 
     render(){
@@ -28,10 +28,10 @@ class AdminPanel extends React.Component {
                 <br/>
                 <br/>
                 <br/>
-                <h5>Withdraw installment</h5>
+                <h5>Withdraw instalment</h5>
                 <Container>
                     <Row className="justify-content-sm-center bordered">
-                        <Button variant="outline-primary" type="submit" onClick={(e) => this.onReleaseInstallment(e)}>Release Installment</Button>
+                        <Button variant="outline-primary" type="submit" onClick={(e) => this.onReleaseInstalment(e)}>Release Instalment</Button>
                     </Row>
                 </Container>
                 <br/>

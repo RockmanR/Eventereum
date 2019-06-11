@@ -2,7 +2,7 @@
 
 Eventereum is an initiative to create a free and open source platform to facilitate funding of events, on the Ethereum blockchain. A simple way to put it: It's a Kickstarter for events. This initiative is mainly made as a learning project to utilize common technical patterns in developing a DApp/decentralized platform.
 
-## Overview
+## Use-case
 
 An event organizer or a group of friends can post a proposal for an event in a blog, detailing about everything from the theme, place and time, organization process, entrance fees (if there is any) and, the break down of preparation costs with a payment plan. The use-cases of the platform can range from a simple BBQ dinner by a group of friends, or a profissional event made by event organizer for thousands of people. Event funders will be provided with a Token that can act as a ticket to attend the event (a Utility Token).
 
@@ -27,7 +27,7 @@ To Achieve the above requirements in a DApp and a smart contract, we need to int
     - Buying and Withrawal options for users
     - Collecting the funds for the Event Organizer
 
-## Eventereum Contracts
+## Contracts in use
 
 Below is explanation of the contracts that have been used from the audited & trusted source ([OpenZepplin](https://openzeppelin.org/)).
 
@@ -70,11 +70,6 @@ I've taken this change to move my idea from a concept to development through a p
 The only contract that can be executed and tested independently is "TicketToken_01.sol", the rest of "EventCrowd_01.sol" and "Burnablecrowdsale.sol" along with "TicketToken_01.sol" need to be tested together. the reason is:
 - EventCrowd contract does not operate by itself, since it's main purpose is to control the Token contract anyway.
 - BurnableCrowdsale is an embeded (childs of) 'EventCrowd' and it has only one function to be tested which is 'claimRefund'. we are going to test this function as part of 'EventCrowd' which is it's parent.
-
-
-## Libraries
-
-I'm using OpenZepplin libraries, under node_modules files. but these are not upgradable yet. In the future I'll move to [ZeppelinOS](https://zeppelinos.org/) which makes their library upgradable.
 
 ## Stretch goals
 
