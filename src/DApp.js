@@ -24,7 +24,7 @@ import Timelines from './components/Timelines';
 import FundingStatus from './components/FundingStatus';
 import UserPanel from './components/UserPanel';
 import AdminPanel from './components/AdminPanel';
-import InstallmentPlan from './components/InstallmentPlan';
+import InstalmentPlan from './components/InstalmentPlan';
 
 // Importing BigNumber for big number calculations
 import BigNumber from 'bignumber.js';
@@ -77,17 +77,18 @@ class App extends React.Component {
       // The vote of the default account for the InstalmentPlan contract
       myVote: '',
       // The details of the 1st instalment (as object) from the InstamentPlan contract
-      installment_1: '',
+      instalment_1: '',
       // The details of the 2nd instalment (as object) from the InstamentPlan contract
-      installment_2: '',
+      instalment_2: '',
       // The details of the 3rd instalment (as object) from the InstamentPlan contract
-      installment_3: '',
+      instalment_3: '',
       // The default account in web3 (i.e. MetaMask)
       web3Account0: '',
       // The balance of the default account in web3
       web3Account0_bal: '',
       // The token balance for the default account
       balanceOf: '',
+      tokenPrice: 1000000000000000,
     };
   }
 
@@ -96,8 +97,6 @@ class App extends React.Component {
     this.getContractData();
     // To get the details of the default account in use (i.e. MetaMask)
     this.getAccountData();
-
-    //this.getInstalmentPlanData();
   }
 
     // To get the details for the 3 main contracts involved (Token, Crowdsale, InstalmentPlan)
@@ -141,18 +140,19 @@ class App extends React.Component {
         }
       });
       InsPlan.methods.instalmentDetails(3).call().then(obj => {
+        console.log('delete: Instalment details: ', obj)
         this.setState({
-          installment_1: obj
+          instalment_1: obj
         })
       });
       InsPlan.methods.instalmentDetails(2).call().then(obj => {
         this.setState({
-          installment_2: obj
+          instalment_2: obj
         })
       });
       InsPlan.methods.instalmentDetails(1).call().then(obj => {
         this.setState({
-          installment_3: obj
+          instalment_3: obj
         })
       });
   
@@ -213,10 +213,15 @@ class App extends React.Component {
             web3Account0_bal: balance
           });
         });
+        // To calculate the number of purchased tokens by a the user. To do so, we need to get the amount of ether deposited in 'InstalmentPlan' 
+        // by that user then convert it to Token numbers (by calculating the price of the token)
+        // Note: we can't calculate the number of tokends directly from the Token contract, since they are locked until the contract gets finalized with a success goal.
         InsPlan.methods.depositsOf(accounts[0]).call().then(deposit => {
-          let tokenPrice = new BigNumber(1000000000000000);
+          // The big number object is needed to do calcualtions for very large numbers.
+          let tokenPrice = new BigNumber(this.state.tokenPrice);
           let deposit_BIG = new BigNumber(deposit);
           let tokenBought_BIG = deposit_BIG.div(tokenPrice);
+          // the 'tokenBought_BIG' is a BigNumber object that needs to be converted to normal number/float
           this.setState({tokenBought: tokenBought_BIG.toNumber()});
         });
       }
@@ -241,18 +246,22 @@ class App extends React.Component {
         return formattedTime;
   }
 
-  //to be accessed from UserPanel.js
+  // To buy Tokens from Crowdsale contract
+  // This function gets enabled only when the Crowdsale contract status is 'open'
+  // To be accessed from UserPanel.js
   buyTokens(amount) {
     //amount is multiplied by the price of the token
-    let weiAmount = 1000000000000000*amount;
+    let weiAmount = this.state.tokenPrice*amount;
     let address = this.state.web3Account0;
-    console.log("delele me: attempt to buy tokens by: ", address)
+    // The gas price might need to be revised later on
     Crowdsale.methods.buyTokens(address).send({from: address, value: weiAmount, gasPrice: "200000000000", gas: "200000"}).then( response => {
         console.log('buyToken respons: ',response);
     })
   }
 
-  //to be accessed from UserPanel.js
+  // To withdraw tokens by the users/funders.
+  // This function gets enabled if the contract got finalized the the goal got reached. 
+  // This function is to be accessed from UserPanel.js
   withdrawTokens() {
     let address = this.state.web3Account0;
     Crowdsale.methods.withdrawTokens(address).send().then( response => {
@@ -260,7 +269,9 @@ class App extends React.Component {
     })
   }
 
-  //to be accessed from UserPanel.js
+  // To claim refund by the users/funders 
+  // This function gets enabled if the Crowdsale contract was 'closed', 'finalized', and the goal didn't reach
+  // to be accessed from UserPanel.js
   claimRefund() {
     let address = this.state.web3Account0;
     Crowdsale.methods.claimRefund(address).send().then( response => {
@@ -268,31 +279,39 @@ class App extends React.Component {
     })
   }
 
-  //to be accessed from UserPanel.js
+  // To vote againsed releasing the payments to beneficiary during the Instalment Plan phase
+  // This function gets enabled if the Tokens were already withdrawn by the user/funder. If the user have already voted, then it won't work as well.
+  // To be accessed from UserPanel.js
   voteToReject() {
     Token.methods.voteToReject().send().then( response => {
         console.log('voteToReject respons: ',response);
     })
   }
 
-  //to be accessed from UserPanel.js
+  // To reverse/undo the vote againsed releasing the payments to beneficiary
+  // This function gets enabled if the user have voted before. If the user have already un-voted, then it won't work.
+  // To be accessed from UserPanel.js  
   undoVoteToReject() {
     Token.methods.undoVoteToReject().send().then( response => {
         console.log('undoVoteToReject respons: ',response);
     })
   }
 
-  //to be accessed from AdminPanel.js
+  // A switch change the Corwdsale status to 'finalized'
+  // This function gets enabled if the Corwdsale contract have passed the closing time
+  // To be accessed from AdminPanel.js
   finalize() {
     Crowdsale.methods.finalize().send().then( response => {
       console.log('finalize respons: ', response);
     })
   }
 
-  //to be accessed from AdminPanel.js
-  releaseInstallment() {
-    InsPlan.methods.releaseInstallment().send().then( response => {
-      console.log('release installment respons: ', response);
+  // To release the instalments/payments to the beneficiary based on the 'InstalmentPlan' contract
+  // This function gets enabled if the instalments mentioned under the InstalmentPlan contract were due
+  // To be accessed from AdminPanel.js
+  releaseInstalment() {
+    InsPlan.methods.releaseInstalment().send().then( response => {
+      console.log('release instalment respons: ', response);
     })
   }
 
@@ -308,7 +327,8 @@ class App extends React.Component {
       <div className='App'>
         <br/>
         <h1>Eventereum</h1>
-        <h5>An open source platform for tokenizing events</h5>
+        <h5>A free and open source platform to tokenize events</h5>
+        feel free to contribute
         <br/>
         <br/>
           <Tabs defaultActiveKey="contractStatus" id="uncontrolled-tab-example">
@@ -319,7 +339,7 @@ class App extends React.Component {
               <Timelines state={this.state} timeConverter={this.timeConverter} />
               <FundingStatus state={this.state}/>
               <AddressDashboard state={this.state}/>
-              <InstallmentPlan state={this.state} timeConverter={this.timeConverter}/>
+              <InstalmentPlan state={this.state} timeConverter={this.timeConverter}/>
             </Tab>
             <Tab eventKey="userPanel" title="User Panel">
               <UserPanel state={this.state} buyTokens={this.buyTokens} withdrawTokens={this.withdrawTokens} claimRefund={this.claimRefund} voteToReject={this.voteToReject} undoVoteToReject={this.undoVoteToReject}/> 
@@ -327,7 +347,7 @@ class App extends React.Component {
             <Tab eventKey="adminPanel" title="Admin Panel">
               <br/>
               <br/>
-              <AdminPanel finalize={this.finalize} releaseInstallment={this.releaseInstallment} />
+              <AdminPanel finalize={this.finalize} releaseInstalment={this.releaseInstalment} />
             </Tab>
           </Tabs>
         <br/>

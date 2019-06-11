@@ -96,7 +96,7 @@ contract InstalmentPlan is ProjectEscrow {
      * @dev to release a next instalment to a beneficiary.
      * This function can be improved with a beneficiary Role, for modularity purposes.
      */
-    function releaseInstallment() public returns (bool)  {
+    function releaseInstalment() public returns (bool)  {
         require(_beneficiary == msg.sender, "InstalmentPlan: only beneficiary can request to release an instalment.");
         require(refundingState() == false, "InstalmentPlan: can't release instalment, due to majority rejection.");
         uint256 no = nextInstalmentNo();
