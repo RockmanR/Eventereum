@@ -2,7 +2,27 @@
 
 Eventereum is an initiative to create a free and open source platform to facilitate funding of events, on the Ethereum blockchain. A simple way to put it: It's a Kickstarter for events. This initiative is mainly made as a learning project to utilize common technical patterns in developing a DApp/decentralized platform.
 
+## Technology stack
+
+The follownig are the technology/framework stack used for the front-end, back-end, and DB servers. 
+
+### For smart-contracts development:
+- [Solidity](https://solidity.readthedocs.io/en/v0.5.9/): smart-contract language
+- [Open-zeppelin](https://openzeppelin.org/): audited smart-contract library. Used for the Crowdsale and Token contracts
+- [Embark](https://embark.status.im/): development platform to automate smart-contracts testing & deployment
+- [Remix](http://remix.ethereum.org/): preferred IDE for smart-contracts
+
+### For front-end (this repo): 
+- [React framework](https://reactjs.org/) & [React app](https://reactjs.org/docs/create-a-new-react-app.html)
+- [React-bootstrap](https://react-bootstrap.github.io/)
+- [Web3js](https://web3js.readthedocs.io/en/1.0/index.html): to connect with MetaMask's browser's wallet. ([EthersJS](https://docs.ethers.io/ethers.js/html/) is also good)
+
+### For back-end: (to be developed)
+- to connect to DB and record the addresses of deployed contracts and other event related info.
+
 ## Use-case
+
+I'll be expaining here a use-case that blockchains could solve for funding events.
 
 An event organizer or a group of friends can post a proposal for an event in a blog, detailing about everything from the theme, place and time, organization process, entrance fees (if there is any) and, the break down of preparation costs with a payment plan. The use-cases of the platform can range from a simple BBQ dinner by a group of friends, or a profissional event made by event organizer for thousands of people. Event funders will be provided with a Token that can act as a ticket to attend the event (a Utility Token).
 
